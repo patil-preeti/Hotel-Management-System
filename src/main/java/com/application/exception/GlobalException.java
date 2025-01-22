@@ -7,21 +7,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalException {
-	
 
 	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity< String>handleResourceNotFoundException(Exception ex)
-	{
-	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+	public ResponseEntity<String> handleResourceNotFoundException(Exception ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 	}
-
 
 	@ExceptionHandler(DuplicateException.class)
-	public ResponseEntity< String>handleDuplicateException(DuplicateException ex)
-	{
-	return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+	public ResponseEntity<String> handleDuplicateException(DuplicateException ex) {
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
 	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 	}
-	
-	 
-	
+
+}

@@ -15,23 +15,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.application.SignUp;
-import com.application.dto.SignUpDto;
+import com.application.dto.SignUpDTO;
 import com.application.service.SignUpService;
 
 @RestController
-@RequestMapping("/signUp")
+@RequestMapping("/auth")
 public class SignUpController {
 
-
-	    @Autowired
+	
+	 @Autowired
 	    private SignUpService signUpService;
 
 	    // Create a new entry (POST API)
 	    @PostMapping("/post")
-	    public ResponseEntity<SignUp> createSignUp(@RequestBody SignUpDto dto) {
+	    public ResponseEntity<SignUp> createSignUp(@RequestBody SignUpDTO dto) {
 	        SignUp savedSignUp = signUpService.saveModel(dto);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(savedSignUp);
-	    }
+	       return ResponseEntity.status(HttpStatus.CREATED).body(savedSignUp);
+	   }
 
 	    // Retrieve all entries (GET API)
 	    @GetMapping("/get")
@@ -39,12 +39,30 @@ public class SignUpController {
 	        List<SignUp> signUpList = signUpService.getAllData();
 	        return ResponseEntity.ok(signUpList);
 	    }
+	    @GetMapping("/get/{mobileNo}")
+		public ResponseEntity<?> findBymobileNoOrEMail(@PathVariable String mobileNo )
+		{
+			return signUpService.findByMobileNoOrEMail(mobileNo);
+		}
+	    @GetMapping("/getByMobileNumber/{mobileNo}")
+	    public ResponseEntity<?> findByMobileNo(@PathVariable String mobileNo) {
+	      return signUpService.findByMobileNo123(mobileNo);
+	    }
+	   
+	    
+
+
+//	    @PostMapping("/posting")
+//	    public ResponseEntity<?> post(@RequestBody SignUpDTO dto ) 
+//	    {
+//	    	return signUpService.saveSignUp(dto);
+//	    }
 
 	    // Update an existing entry by ID (PUT API)
 	    @PutMapping("/update/{id}")
 	    public ResponseEntity<SignUp> updateSignUp(
 	            @PathVariable Long id,
-	            @RequestBody SignUpDto dto) {
+	            @RequestBody SignUpDTO dto) {
 	        SignUp updatedSignUp = signUpService.updateModel(id, dto);
 	        return ResponseEntity.ok(updatedSignUp);
 	    }
@@ -55,7 +73,7 @@ public class SignUpController {
 	        signUpService.deleteModel(id);
 	        return ResponseEntity.ok("Entry deleted successfully.");
 	    }
-	
-
+	    
+	    
 	
 }
