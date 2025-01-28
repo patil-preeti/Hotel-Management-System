@@ -35,6 +35,10 @@ public class SignUp {
 
     private String email;
     private String mobileNo;
+    private String address;
+    private String emergencyContact;
+    private String govtId;
+    
 
     @OneToMany(mappedBy = "signUp", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) // LAZY fetch by default
     @JsonIgnore 
@@ -90,4 +94,30 @@ public class SignUp {
     public void setPaymentDetails(List<PaymentDetails> paymentDetails) {
         this.paymentDetails = paymentDetails;
     }
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getEmergencyContact() {
+		return emergencyContact;
+	}
+
+	public void setEmergencyContact(String emergencyContact) {
+		this.emergencyContact = emergencyContact;
+	}
+
+	public String getGovtId() {
+		return govtId;
+	}
+
+	public void setGovtId(String govtId) {
+		this.govtId = govtId;
+	}
+
+
 }

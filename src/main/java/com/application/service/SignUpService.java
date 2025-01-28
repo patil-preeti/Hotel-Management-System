@@ -33,6 +33,9 @@ public class SignUpService {
 	    signUp.setDob(dto.getDob());
 	    signUp.setEmail(dto.getEmail());
 	    signUp.setMobileNo(dto.getMobileNo());
+	    signUp.setAddress(dto.getAddress());
+	    signUp.setEmergencyContact(dto.getEmergencyContact());
+	    signUp.setGovtId(dto.getGovtId());;
 
 //	    // Handling the PaymentDetails
 //	    if (dto.getPaymentDetails() != null && !dto.getPaymentDetails().isEmpty()) {
@@ -69,6 +72,9 @@ public class SignUpService {
 	        
 	        existingSignUp.setEmail(dto.getEmail());
 	        existingSignUp.setMobileNo(dto.getMobileNo());
+	        existingSignUp.setAddress(dto.getAddress());
+	        existingSignUp.setEmergencyContact(dto.getEmergencyContact());
+	        existingSignUp.setGovtId(dto.getGovtId());
 	        return signUpRepository.save(existingSignUp);
 	    }
 

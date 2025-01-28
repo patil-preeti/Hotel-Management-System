@@ -1,7 +1,9 @@
 package com.application.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,74 +20,51 @@ public class PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+    
     @Autowired
     private SignUpRepository signUpRepository;
-
-    // Add payment details
-//    public PaymentDetails addPaymentDetails(String mobileNo, PaymentDetails paymentDetails) {
-//        // Logic to fetch SignUp data using mobileNo and associate with paymentDetails
-//        // set the SignUp entity (similar to existing code)
-//        return paymentRepository.save(paymentDetails);
-//    }
-    
+ //Add data
     public PaymentDetailsDTO addPaymentDetails(String mobileNo, PaymentDetailsDTO paymentDetailsDTO) {
-        // Fetch the SignUp entity using the mobile number
         SignUp signUp = signUpRepository.findByMobileNo(mobileNo)
                 .orElseThrow(() -> new ResourceNotFoundException("User with mobile number " + mobileNo + " not found"));
 
-        // Convert DTO to Entity and associate with SignUp
         List<PaymentDetails> paymentDetailsList = new ArrayList<>();
         for (PaymentDetails paymentDetails : paymentDetailsDTO.getPaymentDetailsList()) {
-            paymentDetails.setSignUp(signUp); // Associate payment details with the user
+            paymentDetails.setSignUp(signUp);
             paymentDetailsList.add(paymentDetails);
         }
 
-        // Save all payment details
         paymentRepository.saveAll(paymentDetailsList);
 
-        // Return the response DTO
         return new PaymentDetailsDTO(signUp, paymentDetailsList);
     }
 
 
-    // Get payment details by ID
-    public PaymentDetails getPaymentDetailsById(Long id) {
-        return paymentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Payment details not found for id " + id));
-    }
-// // Get payment details by mobile number
-//    public PaymentDetails getPaymentDetailsByMobile(String mobileNo) {
-//        // Fetch SignUp entity using the mobile number
-//        SignUp signUp = signUpRepository.findByMobileNo(mobileNo)
-//                .orElseThrow(() -> new ResourceNotFoundException("User with mobile number " + mobileNo + " not found"));
-//
-//        // Fetch payment details associated with the SignUp entity
-//        return paymentRepository.findBySignUp(signUp)
-//                .orElseThrow(() -> new ResourceNotFoundException("No payment details found for user with mobile number " + mobileNo));
-//    }
-    
+
+
+    // get data
     public PaymentDetailsDTO getPaymentDetailsByMobile(String mobileNo) {
-        // Fetch SignUp entity using the mobile number
         SignUp signUp = signUpRepository.findByMobileNo(mobileNo)
                 .orElseThrow(() -> new ResourceNotFoundException("User with mobile number " + mobileNo + " not found"));
 
-        // Fetch payment details associated with the SignUp entity
-        List<PaymentDetails> paymentDetailsList = paymentRepository.findBySignUp(signUp);
-        if (paymentDetailsList.isEmpty()) {
-            throw new ResourceNotFoundException("No payment details found for user with mobile number " + mobileNo);
-        }
+        List<PaymentDetails> allTrips = paymentRepository.findBySignUp(signUp);
 
-        // Return both SignUp and PaymentDetails list
-        return new PaymentDetailsDTO(signUp, paymentDetailsList);
+        List<PaymentDetails> upcomingTrips = allTrips.stream()
+                .filter(trip -> trip.getCheckIn().isAfter(LocalDate.now()))
+                .collect(Collectors.toList());
+
+        List<PaymentDetails> pastTrips = allTrips.stream()
+                .filter(trip -> trip.getCheckOut().isBefore(LocalDate.now()))
+                .collect(Collectors.toList());
+
+        return new PaymentDetailsDTO(signUp, upcomingTrips, pastTrips);
     }
 
-
-    // Update payment details by ID
+    //  Update payment details
     public PaymentDetails updatePaymentDetails(Long id, PaymentDetails paymentDetails) {
         PaymentDetails existingPaymentDetails = paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment details not found for id " + id));
 
-        // Update existing payment details with the new ones
         existingPaymentDetails.setHotelName(paymentDetails.getHotelName());
         existingPaymentDetails.setAddress(paymentDetails.getAddress());
         existingPaymentDetails.setCheckIn(paymentDetails.getCheckIn());
@@ -97,10 +76,16 @@ public class PaymentService {
         return paymentRepository.save(existingPaymentDetails);
     }
 
-    // Delete payment details by ID
+    //  Delete payment details
     public void deletePaymentDetails(Long id) {
         PaymentDetails paymentDetails = paymentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment details not found for id " + id));
         paymentRepository.delete(paymentDetails);
+    }
+
+    //  Get payment details by ID
+    public PaymentDetails getPaymentDetailsById(Long id) {
+        return paymentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Payment details not found for id " + id));
     }
 }

@@ -18,6 +18,10 @@ public class SignUpDTO {
 
     private String email;
     private String mobileNo;
+    private String address;
+    private String emergencyContact;
+    private String govtId;
+    
     private List<PaymentDetailsDTO> paymentDetails;
 
     // Getters and Setters
@@ -68,4 +72,28 @@ public class SignUpDTO {
     public void setPaymentDetails(List<PaymentDetailsDTO> paymentDetails) {
         this.paymentDetails = paymentDetails;
     }
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getEmergencyContact() {
+		return emergencyContact;
+	}
+
+	public void setEmergencyContact(String emergencyContact) {
+		this.emergencyContact = emergencyContact;
+	}
+
+	public String getGovtId() {
+		return govtId;
+	}
+
+	public void setGovtId(String govtId) {
+		this.govtId = govtId;
+	}
 }

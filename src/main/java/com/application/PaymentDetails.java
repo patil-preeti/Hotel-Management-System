@@ -1,10 +1,8 @@
 package com.application;
 
 import java.time.LocalDate;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "payment_details") 
-@NoArgsConstructor
+@NoArgsConstructor 
 @AllArgsConstructor
 public class PaymentDetails {
 
@@ -27,18 +25,19 @@ public class PaymentDetails {
 
     private String hotelName;
     private String address;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate checkIn;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate checkOut;
 
-    private Double price;  // Changed from String to Double for numerical operations
-    private String payment;  // Ideally, use an Enum for predefined values like "PAID", "PENDING"
-
+    private Double price;
+    private String payment;  
     private String hotelImg;
 
     @ManyToOne
-    @JoinColumn(name = "signup_id") // Renamed to signup_id for clarity
+    @JoinColumn(name = "signup_id") 
     @JsonBackReference
     private SignUp signUp;
 
@@ -114,4 +113,5 @@ public class PaymentDetails {
     public void setSignUp(SignUp signUp) {
         this.signUp = signUp;
     }
+    
 }
