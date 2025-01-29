@@ -9,7 +9,7 @@ import com.application.SignUp;
 
 public class PaymentDetailsDTO {
     private SignUp signUp;
-    private List<PaymentDetails> paymentDetailsList; 
+    private PaymentDetails paymentDetailsList; 
     private List<PaymentDetails> upcomingTrips;
     private List<PaymentDetails> pastTrips;
 
@@ -18,7 +18,7 @@ public class PaymentDetailsDTO {
     public PaymentDetailsDTO() {}
 
  // Constructor for adding payment details 
-    public PaymentDetailsDTO(SignUp signUp, List<PaymentDetails> paymentDetailsList) {
+    public PaymentDetailsDTO(SignUp signUp, PaymentDetails paymentDetailsList) {
         this.signUp = signUp;
         this.paymentDetailsList = paymentDetailsList;
         this.upcomingTrips = null;
@@ -42,11 +42,11 @@ public class PaymentDetailsDTO {
         this.signUp = signUp;
     }
 
-    public List<PaymentDetails> getPaymentDetailsList() {
+    public PaymentDetails getPaymentDetailsList() {
         return paymentDetailsList;
     }
 
-    public void setPaymentDetailsList(List<PaymentDetails> paymentDetailsList) {
+    public void setPaymentDetailsList(PaymentDetails paymentDetailsList) {
         this.paymentDetailsList = paymentDetailsList;
     }
 

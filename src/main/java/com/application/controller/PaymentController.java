@@ -19,11 +19,12 @@ public class PaymentController {
     @PostMapping("/add")
     public ResponseEntity<PaymentDetailsDTO> addPaymentDetails(
             @RequestParam String mobileNo, 
-            @RequestBody PaymentDetailsDTO paymentDetailsDTO) {
-        
-        PaymentDetailsDTO responseDTO = paymentService.addPaymentDetails(mobileNo, paymentDetailsDTO);
+            @RequestBody PaymentDetails paymentDetails) {
+
+        PaymentDetailsDTO responseDTO = paymentService.addPaymentDetails(mobileNo, paymentDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
+
     
     @GetMapping("/{id}")
     public ResponseEntity<PaymentDetails> getPaymentDetailsById(@PathVariable Long id) {

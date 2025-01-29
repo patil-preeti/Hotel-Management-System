@@ -23,24 +23,21 @@ public class PaymentService {
     
     @Autowired
     private SignUpRepository signUpRepository;
- //Add data
-    public PaymentDetailsDTO addPaymentDetails(String mobileNo, PaymentDetailsDTO paymentDetailsDTO) {
-        SignUp signUp = signUpRepository.findByMobileNo(mobileNo)
-                .orElseThrow(() -> new ResourceNotFoundException("User with mobile number " + mobileNo + " not found"));
+ 
+        // Accepts only one `PaymentDetails` object instead of a list
+        public PaymentDetailsDTO addPaymentDetails(String mobileNo, PaymentDetails paymentDetails) {
+            SignUp signUp = signUpRepository.findByMobileNo(mobileNo)
+                    .orElseThrow(() -> new ResourceNotFoundException("User with mobile number " + mobileNo + " not found"));
 
-        List<PaymentDetails> paymentDetailsList = new ArrayList<>();
-        for (PaymentDetails paymentDetails : paymentDetailsDTO.getPaymentDetailsList()) {
+            // Associate with the user
             paymentDetails.setSignUp(signUp);
-            paymentDetailsList.add(paymentDetails);
+
+            // Save payment details
+            paymentRepository.save(paymentDetails);
+
+            return new PaymentDetailsDTO(signUp, paymentDetails);
         }
-
-        paymentRepository.saveAll(paymentDetailsList);
-
-        return new PaymentDetailsDTO(signUp, paymentDetailsList);
-    }
-
-
-
+    
 
     // get data
     public PaymentDetailsDTO getPaymentDetailsByMobile(String mobileNo) {
